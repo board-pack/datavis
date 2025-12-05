@@ -636,8 +636,8 @@
                     <!-- Expense categories will be populated by JavaScript -->
                 </div>
             </div>
-            <div class="expense-insight">
-                <p>People costs represent 70% of total expenses, reflecting our investment in talent. Operating expenses grew 22% while headcount grew 56% — <strong>achieving efficiency at scale</strong>.</p>
+            <div class="expense-insight" id="expenseInsight">
+                <p>People costs represent 70% of total expenses, reflecting our investment in talent. Operating expenses grew 22% while headcount grew 56%.</p>
             </div>
         </div>
         
@@ -661,7 +661,7 @@
             </div>
         </div>
         
-        <div class="insight-banner">
+        <div class="insight-banner" id="revenueInsight">
             <p class="insight-text">
                 We're growing profit <strong>faster</strong> than revenue: our business model is getting more <strong>efficient at scale</strong>
             </p>
@@ -1237,18 +1237,32 @@
                 const revenueBreakdown = document.getElementById('revenueBreakdown');
                 const expenseBreakdown = document.getElementById('expenseBreakdown');
                 const comparisonSection = document.getElementById('comparisonSection');
+                const expenseInsight = document.getElementById('expenseInsight');
+                const revenueInsight = document.getElementById('revenueInsight');
                 
                 if (year === 'all') {
                     periodSelector.style.display = 'none';
                     revenueBreakdown.style.display = 'none';
                     expenseBreakdown.style.display = 'none';
                     comparisonSection.style.display = 'block';
+                    expenseInsight.style.display = 'none';
+                    revenueInsight.style.display = 'none';
                     renderMetrics('all');
                 } else {
                     periodSelector.style.display = 'flex';
                     revenueBreakdown.style.display = 'block';
                     expenseBreakdown.style.display = 'block';
                     comparisonSection.style.display = 'block';
+                    
+                    // Only show insights for 2025
+                    if (year === '2025') {
+                        expenseInsight.style.display = 'block';
+                        revenueInsight.style.display = 'block';
+                    } else {
+                        expenseInsight.style.display = 'none';
+                        revenueInsight.style.display = 'none';
+                    }
+                    
                     renderMetrics(parseInt(year));
                     renderExpenseBreakdown(year);
                     renderRevenueBreakdown(year, currentPeriod);
