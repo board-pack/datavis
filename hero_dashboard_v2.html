@@ -1099,9 +1099,9 @@ revenueData = {"2023":{"Q1":{"total":231157.63847435065,"categories":{"Enterpris
         renderMetrics(2025);
         renderRevenueBreakdown('2025', 'YTD');
         
-        // Animate comparison values
+        // Animate comparison values (only those with data-count attribute)
         setTimeout(() => {
-            document.querySelectorAll('.comparison-value').forEach(el => {
+            document.querySelectorAll('.comparison-value[data-count]').forEach(el => {
                 const value = parseInt(el.dataset.count);
                 animateValue(el, 0, value, 2000, false, true);
             });
