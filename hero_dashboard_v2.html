@@ -606,8 +606,8 @@
         </div>
         
         <div class="comparison-section" id="comparisonSection">
-            <h2 class="section-title">Three-Year Revenue Progression</h2>
-            <div class="comparison-grid">
+            <h2 class="section-title" id="comparisonTitle">Three-Year Revenue Progression</h2>
+            <div class="comparison-grid" id="revenueComparison">
                 <div class="comparison-item">
                     <div class="comparison-year">2023</div>
                     <div class="comparison-value" data-count="836178">$0</div>
@@ -622,6 +622,44 @@
                     <div class="comparison-year">2025</div>
                     <div class="comparison-value" data-count="1107896">$0</div>
                     <div class="comparison-label">Revenue (Jan-Oct)</div>
+                </div>
+            </div>
+            
+            <h2 class="section-title" style="margin-top: 50px;" id="profitComparisonTitle">Net Profit Progression</h2>
+            <div class="comparison-grid" id="profitComparison">
+                <div class="comparison-item">
+                    <div class="comparison-year">2023</div>
+                    <div class="comparison-value" data-count="146778">$0</div>
+                    <div class="comparison-label">Net Profit (Jan-Oct)</div>
+                </div>
+                <div class="comparison-item">
+                    <div class="comparison-year">2024</div>
+                    <div class="comparison-value" data-count="193855">$0</div>
+                    <div class="comparison-label">Net Profit (Jan-Oct)</div>
+                </div>
+                <div class="comparison-item">
+                    <div class="comparison-year">2025</div>
+                    <div class="comparison-value" data-count="263804">$0</div>
+                    <div class="comparison-label">Net Profit (Jan-Oct)</div>
+                </div>
+            </div>
+            
+            <h2 class="section-title" style="margin-top: 50px;" id="marginComparisonTitle">Profit Margin Progression</h2>
+            <div class="comparison-grid" id="marginComparison">
+                <div class="comparison-item">
+                    <div class="comparison-year">2023</div>
+                    <div class="comparison-value">17.6%</div>
+                    <div class="comparison-label">Net Margin</div>
+                </div>
+                <div class="comparison-item">
+                    <div class="comparison-year">2024</div>
+                    <div class="comparison-value">20.4%</div>
+                    <div class="comparison-label">Net Margin</div>
+                </div>
+                <div class="comparison-item">
+                    <div class="comparison-year">2025</div>
+                    <div class="comparison-value">23.8%</div>
+                    <div class="comparison-label">Net Margin</div>
                 </div>
             </div>
         </div>
@@ -646,7 +684,7 @@
             <button class="period-btn" data-period="Q2">Q2</button>
             <button class="period-btn" data-period="Q3">Q3</button>
             <button class="period-btn" data-period="Q4">Q4</button>
-            <button class="period-btn active" data-period="YTD">YTD</button>
+            <button class="period-btn active" data-period="YTD">All Quarters</button>
         </div>
         
         <div class="revenue-breakdown" id="revenueBreakdown">
@@ -1237,6 +1275,12 @@
                 const revenueBreakdown = document.getElementById('revenueBreakdown');
                 const expenseBreakdown = document.getElementById('expenseBreakdown');
                 const comparisonSection = document.getElementById('comparisonSection');
+                const comparisonTitle = document.getElementById('comparisonTitle');
+                const revenueComparison = document.getElementById('revenueComparison');
+                const profitComparison = document.getElementById('profitComparison');
+                const marginComparison = document.getElementById('marginComparison');
+                const profitComparisonTitle = document.getElementById('profitComparisonTitle');
+                const marginComparisonTitle = document.getElementById('marginComparisonTitle');
                 const expenseInsight = document.getElementById('expenseInsight');
                 const revenueInsight = document.getElementById('revenueInsight');
                 
@@ -1245,23 +1289,194 @@
                     revenueBreakdown.style.display = 'none';
                     expenseBreakdown.style.display = 'none';
                     comparisonSection.style.display = 'block';
+                    comparisonTitle.textContent = 'Three-Year Revenue Progression';
+                    profitComparisonTitle.textContent = 'Net Profit Progression';
+                    marginComparisonTitle.textContent = 'Profit Margin Progression';
                     expenseInsight.style.display = 'none';
                     revenueInsight.style.display = 'none';
+                    
+                    // Show all three years for all grids
+                    revenueComparison.innerHTML = `
+                        <div class="comparison-item">
+                            <div class="comparison-year">2023</div>
+                            <div class="comparison-value">$836K</div>
+                            <div class="comparison-label">Revenue (Jan-Oct)</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-year">2024</div>
+                            <div class="comparison-value">$952K</div>
+                            <div class="comparison-label">Revenue (Jan-Oct)</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-year">2025</div>
+                            <div class="comparison-value">$1.11M</div>
+                            <div class="comparison-label">Revenue (Jan-Oct)</div>
+                        </div>
+                    `;
+                    profitComparison.innerHTML = `
+                        <div class="comparison-item">
+                            <div class="comparison-year">2023</div>
+                            <div class="comparison-value">$147K</div>
+                            <div class="comparison-label">Net Profit (Jan-Oct)</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-year">2024</div>
+                            <div class="comparison-value">$194K</div>
+                            <div class="comparison-label">Net Profit (Jan-Oct)</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-year">2025</div>
+                            <div class="comparison-value">$264K</div>
+                            <div class="comparison-label">Net Profit (Jan-Oct)</div>
+                        </div>
+                    `;
+                    marginComparison.innerHTML = `
+                        <div class="comparison-item">
+                            <div class="comparison-year">2023</div>
+                            <div class="comparison-value">17.6%</div>
+                            <div class="comparison-label">Net Margin</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-year">2024</div>
+                            <div class="comparison-value">20.4%</div>
+                            <div class="comparison-label">Net Margin</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-year">2025</div>
+                            <div class="comparison-value">23.8%</div>
+                            <div class="comparison-label">Net Margin</div>
+                        </div>
+                    `;
+                    
                     renderMetrics('all');
-                } else {
+                } else if (year === '2023') {
+                    // 2023: Hide comparison section entirely
+                    periodSelector.style.display = 'flex';
+                    revenueBreakdown.style.display = 'block';
+                    expenseBreakdown.style.display = 'block';
+                    comparisonSection.style.display = 'none';
+                    expenseInsight.style.display = 'none';
+                    revenueInsight.style.display = 'none';
+                    renderMetrics(parseInt(year));
+                    renderExpenseBreakdown(year);
+                    renderRevenueBreakdown(year, currentPeriod);
+                } else if (year === '2024') {
+                    // 2024: Show 2023 and 2024 comparison
                     periodSelector.style.display = 'flex';
                     revenueBreakdown.style.display = 'block';
                     expenseBreakdown.style.display = 'block';
                     comparisonSection.style.display = 'block';
+                    comparisonTitle.textContent = 'Revenue: 2023 vs 2024';
+                    profitComparisonTitle.textContent = 'Net Profit: 2023 vs 2024';
+                    marginComparisonTitle.textContent = 'Profit Margin: 2023 vs 2024';
+                    expenseInsight.style.display = 'none';
+                    revenueInsight.style.display = 'none';
                     
-                    // Only show insights for 2025
-                    if (year === '2025') {
-                        expenseInsight.style.display = 'block';
-                        revenueInsight.style.display = 'block';
-                    } else {
-                        expenseInsight.style.display = 'none';
-                        revenueInsight.style.display = 'none';
-                    }
+                    // Update all comparison grids to show only 2023 and 2024
+                    revenueComparison.innerHTML = `
+                        <div class="comparison-item">
+                            <div class="comparison-year">2023</div>
+                            <div class="comparison-value">$836K</div>
+                            <div class="comparison-label">Revenue (Jan-Oct)</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-year">2024</div>
+                            <div class="comparison-value">$952K</div>
+                            <div class="comparison-label">Revenue (Jan-Oct)</div>
+                        </div>
+                    `;
+                    profitComparison.innerHTML = `
+                        <div class="comparison-item">
+                            <div class="comparison-year">2023</div>
+                            <div class="comparison-value">$147K</div>
+                            <div class="comparison-label">Net Profit (Jan-Oct)</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-year">2024</div>
+                            <div class="comparison-value">$194K</div>
+                            <div class="comparison-label">Net Profit (Jan-Oct)</div>
+                        </div>
+                    `;
+                    marginComparison.innerHTML = `
+                        <div class="comparison-item">
+                            <div class="comparison-year">2023</div>
+                            <div class="comparison-value">17.6%</div>
+                            <div class="comparison-label">Net Margin</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-year">2024</div>
+                            <div class="comparison-value">20.4%</div>
+                            <div class="comparison-label">Net Margin</div>
+                        </div>
+                    `;
+                    
+                    renderMetrics(parseInt(year));
+                    renderExpenseBreakdown(year);
+                    renderRevenueBreakdown(year, currentPeriod);
+                } else {
+                    // 2025: Show all three years
+                    periodSelector.style.display = 'flex';
+                    revenueBreakdown.style.display = 'block';
+                    expenseBreakdown.style.display = 'block';
+                    comparisonSection.style.display = 'block';
+                    comparisonTitle.textContent = 'Three-Year Revenue Progression';
+                    profitComparisonTitle.textContent = 'Net Profit Progression';
+                    marginComparisonTitle.textContent = 'Profit Margin Progression';
+                    expenseInsight.style.display = 'block';
+                    revenueInsight.style.display = 'block';
+                    
+                    // Restore full comparison grids
+                    revenueComparison.innerHTML = `
+                        <div class="comparison-item">
+                            <div class="comparison-year">2023</div>
+                            <div class="comparison-value">$836K</div>
+                            <div class="comparison-label">Revenue (Jan-Oct)</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-year">2024</div>
+                            <div class="comparison-value">$952K</div>
+                            <div class="comparison-label">Revenue (Jan-Oct)</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-year">2025</div>
+                            <div class="comparison-value">$1.11M</div>
+                            <div class="comparison-label">Revenue (Jan-Oct)</div>
+                        </div>
+                    `;
+                    profitComparison.innerHTML = `
+                        <div class="comparison-item">
+                            <div class="comparison-year">2023</div>
+                            <div class="comparison-value">$147K</div>
+                            <div class="comparison-label">Net Profit (Jan-Oct)</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-year">2024</div>
+                            <div class="comparison-value">$194K</div>
+                            <div class="comparison-label">Net Profit (Jan-Oct)</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-year">2025</div>
+                            <div class="comparison-value">$264K</div>
+                            <div class="comparison-label">Net Profit (Jan-Oct)</div>
+                        </div>
+                    `;
+                    marginComparison.innerHTML = `
+                        <div class="comparison-item">
+                            <div class="comparison-year">2023</div>
+                            <div class="comparison-value">17.6%</div>
+                            <div class="comparison-label">Net Margin</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-year">2024</div>
+                            <div class="comparison-value">20.4%</div>
+                            <div class="comparison-label">Net Margin</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-year">2025</div>
+                            <div class="comparison-value">23.8%</div>
+                            <div class="comparison-label">Net Margin</div>
+                        </div>
+                    `;
                     
                     renderMetrics(parseInt(year));
                     renderExpenseBreakdown(year);
