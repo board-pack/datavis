@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revenue & Expenses 2023-2025</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            padding: 40px;
+            background: #f8f9fa;
+            margin: 0;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 28px;
+            text-align: center;
+        }
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-size: 14px;
+            text-align: center;
+        }
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+        .chart-panel {
+            background: #fafbfc;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #e1e4e8;
+        }
+        .chart-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .chart-wrapper {
+            position: relative;
+            height: 350px;
+        }
+        .note {
+            margin-top: 30px;
+            padding: 12px;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+            font-size: 13px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Revenue & Expenses Analysis</h1>
+        <div class="subtitle">Year-over-year comparison 2023-2025</div>
+        
+        <div class="charts-grid">
+            <div class="chart-panel">
+                <div class="chart-title">2023</div>
+                <div class="chart-wrapper">
+                    <canvas id="chart2023"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-panel">
+                <div class="chart-title">2024</div>
+                <div class="chart-wrapper">
+                    <canvas id="chart2024"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-panel">
+                <div class="chart-title">2025</div>
+                <div class="chart-wrapper">
+                    <canvas id="chart2025"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="note">
+            <strong>Note:</strong> November and December 2025 data are pending and not yet available.
+        </div>
+    </div>
+
+    <script>
+        const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        
+        const data2023 = {
+            revenue: [84570, 72826, 73762, 83724, 84268, 82220, 78030, 93667, 97045, 86066, 110545, 86571],
+            expenses: [71457, 69269, 63537, 61885, 67461, 65253, 70642, 69735, 70940, 79213, 77666, 78985],
+            netProfit: [13113, 3557, 10224, 21840, 16808, 16967, 7388, 23932, 26105, 6853, 32879, 7586]
+        };
+        
+        const data2024 = {
+            revenue: [99302, 87860, 89282, 101209, 100937, 92387, 85833, 73285, 100776, 121302, 121816, 117764],
+            expenses: [80358, 78112, 77946, 87619, 77584, 68990, 74269, 69832, 69936, 73175, 80010, 69773],
+            netProfit: [18945, 9748, 11336, 13591, 23353, 23396, 11564, 3454, 30840, 48127, 41806, 47990]
+        };
+        
+        const data2025 = {
+            revenue: [87594, 139144, 115890, 114720, 100916, 99251, 92304, 116515, 100840, 140723, null, null],
+            expenses: [80896, 92131, 90055, 88449, 79159, 80961, 75107, 81436, 83251, 92648, null, null],
+            netProfit: [6698, 47013, 25835, 26270, 21756, 18290, 17197, 35079, 17589, 48075, null, null]
+        };
+
+        function createChart(canvasId, revenue, expenses, netProfit, color) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            return new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            type: 'bar',
+                            label: 'Net Profit',
+                            data: netProfit,
+                            backgroundColor: color.replace('rgb', 'rgba').replace(')', ', 0.2)'),
+                            borderColor: color.replace('rgb', 'rgba').replace(')', ', 0.4)'),
+                            borderWidth: 1,
+                            order: 2
+                        },
+                        {
+                            type: 'line',
+                            label: 'Revenue',
+                            data: revenue,
+                            borderColor: color,
+                            backgroundColor: 'transparent',
+                            tension: 0.4,
+                            borderWidth: 3,
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                            pointBackgroundColor: color,
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            fill: false,
+                            order: 0
+                        },
+                        {
+                            type: 'line',
+                            label: 'Expenses',
+                            data: expenses,
+                            borderColor: color,
+                            backgroundColor: 'transparent',
+                            tension: 0.4,
+                            borderWidth: 3,
+                            borderDash: [8, 4],
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            pointBackgroundColor: color,
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            fill: false,
+                            order: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                padding: 15,
+                                font: {
+                                    size: 13,
+                                    weight: '600'
+                                },
+                                usePointStyle: true,
+                                generateLabels: function(chart) {
+                                    const datasets = chart.data.datasets;
+                                    return datasets.map((dataset, i) => ({
+                                        text: dataset.label,
+                                        fillStyle: dataset.type === 'bar' ? dataset.backgroundColor : dataset.borderColor,
+                                        strokeStyle: dataset.borderColor,
+                                        lineWidth: dataset.type === 'line' ? 3 : 0,
+                                        lineDash: dataset.borderDash || [],
+                                        hidden: !chart.isDatasetVisible(i),
+                                        index: i,
+                                        pointStyle: dataset.type === 'bar' ? 'rect' : 'line'
+                                    }));
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 12,
+                            titleFont: {
+                                size: 13,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 12
+                            },
+                            callbacks: {
+                                label: function(context) {
+                                    if (context.parsed.y === null) {
+                                        return context.dataset.label + ': Pending';
+                                    }
+                                    return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 0,
+                            max: 145000,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value/1000) + 'k';
+                                },
+                                font: {
+                                    size: 11
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    }
+                }
+            });
+        }
+
+        // Create charts for each year
+        createChart('chart2023', data2023.revenue, data2023.expenses, data2023.netProfit, 'rgb(231, 76, 60)');
+        createChart('chart2024', data2024.revenue, data2024.expenses, data2024.netProfit, 'rgb(52, 152, 219)');
+        createChart('chart2025', data2025.revenue, data2025.expenses, data2025.netProfit, 'rgb(39, 174, 96)');
+    </script>
+</body>
+</html>
