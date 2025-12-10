@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offshorly Skills Matrix Dashboard - July to October 2025</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #06b6d4;
+            --bg-dark: #0a0f1a;
+            --bg-card: #111827;
+            --text-primary: #f9fafb;
+            --text-secondary: #9ca3af;
+            --border: rgba(255, 255, 255, 0.1);
+            --strength: #10b981;
+            --moderate: #f59e0b;
+            --opportunity: #ef4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 60px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header {
+            margin-bottom: 50px;
+            animation: slideDown 0.8s ease-out;
+        }
+        
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 72px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            padding-left: 2px;
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
+
+        .department-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 50px;
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeIn 0.8s ease-out backwards;
+        }
+
+        .department-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+        }
+
+        .department-section:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .department-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .department-title {
+            font-size: 42px;
+            font-weight: 700;
+            padding-left: 2px;
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .team-size {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(550px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .chart-container:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .chart-title {
+            font-size: 20px;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+        }
+
+        .insights-box {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        .insights-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+        }
+
+        .insights-title::before {
+            content: "💡";
+            margin-right: 12px;
+            font-size: 28px;
+        }
+
+        .insight-item {
+            margin: 16px 0;
+            line-height: 1.8;
+            color: var(--text-primary);
+        }
+
+        .insight-item ul {
+            margin-left: 20px;
+            margin-top: 12px;
+        }
+
+        .insight-item li {
+            margin: 8px 0;
+            color: var(--text-secondary);
+        }
+
+        .strength {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .opportunity {
+            color: var(--opportunity);
+            font-weight: 600;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 50px;
+            padding: 30px;
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        .legend-color {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 60px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .footer p {
+            margin: 8px 0;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .department-section:nth-child(2) { animation-delay: 0.1s; }
+        .department-section:nth-child(3) { animation-delay: 0.2s; }
+        .department-section:nth-child(4) { animation-delay: 0.3s; }
+        .department-section:nth-child(5) { animation-delay: 0.4s; }
+
+        @media (max-width: 1200px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 48px;
+            }
+
+            body {
+                padding: 30px;
+            }
+
+            .department-section {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            .department-title {
+                font-size: 28px;
+            }
+
+            .legend {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Skills Matrix Dashboard</h1>
+            <p class="subtitle">Comprehensive Team Capabilities Assessment - July to October 2025</p>
+        </div>
+
+        <!-- ENTERPRISE DEVELOPERS -->
+        <div class="department-section" id="enterprise-devs">
+            <div class="department-header">
+                <h2 class="department-title">💻 Enterprise Developers</h2>
+                <span class="team-size">45 Team Members</span>
+            </div>
+            
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <h3 class="chart-title">Frontend Tech Stack</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="frontendChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <h3 class="chart-title">Backend Tech Stack</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="backendChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <h3 class="chart-title">Database Technologies</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="databaseChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <h3 class="chart-title">DevOps & Cloud</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="devopsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="insights-box" id="dev-insights">
+                <div class="insights-title">Key Insights</div>
+                <div id="dev-insights-content"></div>
+            </div>
+        </div>
+
+        <!-- EMERGING TECH -->
+        <div class="department-section" id="emerging-tech">
+            <div class="department-header">
+                <h2 class="department-title">🤖 Emerging Tech (AI & ML)</h2>
+                <span class="team-size">45 Developers</span>
+            </div>
+            
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <h3 class="chart-title">AI/ML Skills & Tools</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="aimlChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="insights-box" id="ai-insights">
+                <div class="insights-title">Key Insights</div>
+                <div id="ai-insights-content"></div>
+            </div>
+        </div>
+
+        <!-- DESIGN TEAM -->
+        <div class="department-section" id="design-team">
+            <div class="department-header">
+                <h2 class="department-title">🎨 Design & Creative</h2>
+                <span class="team-size">7 Designers</span>
+            </div>
+            
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <h3 class="chart-title">UI/UX Design</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="uiuxChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <h3 class="chart-title">Graphic Design & Branding</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="graphicChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <h3 class="chart-title">Animation & Motion</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="animationChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <h3 class="chart-title">Illustration</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="illustrationChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="insights-box" id="design-insights">
+                <div class="insights-title">Key Insights</div>
+                <div id="design-insights-content"></div>
+            </div>
+        </div>
+
+        <!-- PRODUCT EXCELLENCE -->
+        <div class="department-section" id="product-excellence">
+            <div class="department-header">
+                <h2 class="department-title">✅ Product Excellence</h2>
+                <span class="team-size">5 QA Engineers</span>
+            </div>
+            
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <h3 class="chart-title">Manual QA & Testing</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="manualQaChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <h3 class="chart-title">Automation QA</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="automationQaChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <h3 class="chart-title">Business Analysis</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="baChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="insights-box" id="pet-insights">
+                <div class="insights-title">Key Insights</div>
+                <div id="pet-insights-content"></div>
+            </div>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: #10b981;"></div>
+                <span>Strength (Avg 3.5+)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #f59e0b;"></div>
+                <span>Moderate (Avg 2.5-3.4)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ef4444;"></div>
+                <span>Learning Opportunity (Avg <2.5)</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>📊 Offshorly Skills Matrix Update - July to October 2025</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">Rating Scale: 1 (No Experience) → 5 (Expert)</p>
+        </div>
+    </div>
+
+    <script>
+        // Load the skills data
+        const skillsData = {"enterprise_devs":{"frontend":{"Frontend":{"avg":3.56,"proficient":36,"total":45,"pct":80.0},"Vue":{"avg":2.02,"proficient":16,"total":45,"pct":35.6},"React":{"avg":2.44,"proficient":19,"total":45,"pct":42.2},"Angular":{"avg":1.31,"proficient":4,"total":45,"pct":8.9}},"backend":{"Backend":{"avg":2.71,"proficient":23,"total":45,"pct":51.1},"Backend":{"avg":2.02,"proficient":11,"total":45,"pct":24.4},"Backend":{"avg":2.24,"proficient":15,"total":45,"pct":33.3},"Web Development":{"avg":2.13,"proficient":13,"total":45,"pct":28.9},"Express.js (JavaScript) ":{"avg":2.29,"proficient":18,"total":45,"pct":40.0},"Django (Python)":{"avg":1.67,"proficient":10,"total":45,"pct":22.2},"Laravel (PHP)":{"avg":2.02,"proficient":11,"total":45,"pct":24.4},"Node.js":{"avg":2.62,"proficient":21,"total":45,"pct":46.7}},"python":{"General-purpose":{"avg":2.07,"proficient":15,"total":45,"pct":33.3},"Backend":{"avg":2.02,"proficient":11,"total":45,"pct":24.4},"Data Science":{"avg":1.56,"proficient":8,"total":45,"pct":17.8},"Django (Python)":{"avg":1.67,"proficient":10,"total":45,"pct":22.2}},"database":{"MySQL":{"avg":3.09,"proficient":30,"total":45,"pct":66.7},"PostgreSQL":{"avg":2.0,"proficient":14,"total":45,"pct":31.1},"MongoDB":{"avg":2.22,"proficient":17,"total":45,"pct":37.8},"Firebase":{"avg":2.0,"proficient":15,"total":45,"pct":33.3},"Redis":{"avg":1.69,"proficient":8,"total":45,"pct":17.8}},"devops":{"Docker":{"avg":2.18,"proficient":16,"total":45,"pct":35.6},"Kubernetes":{"avg":1.33,"proficient":3,"total":45,"pct":6.7},"Terraform":{"avg":1.2,"proficient":2,"total":45,"pct":4.4},"GitHub Actions":{"avg":1.84,"proficient":11,"total":45,"pct":24.4},"Jenkins":{"avg":1.36,"proficient":3,"total":45,"pct":6.7},"Nginx":{"avg":1.73,"proficient":10,"total":45,"pct":22.2},"Apache":{"avg":1.6,"proficient":7,"total":45,"pct":15.6},"AWS":{"avg":2.04,"proficient":15,"total":45,"pct":33.3},"DigitalOcean":{"avg":1.76,"proficient":10,"total":45,"pct":22.2},"Microsoft Azure":{"avg":1.22,"proficient":2,"total":45,"pct":4.4},"Google Cloud":{"avg":1.36,"proficient":3,"total":45,"pct":6.7}},"total":45},"design":{"uiux":{"Wireframing":{"avg":3.43,"proficient":5,"total":7,"pct":71.4},"Prototyping":{"avg":3.43,"proficient":5,"total":7,"pct":71.4},"Web Design":{"avg":4.0,"proficient":7,"total":7,"pct":100.0},"Mobile Design":{"avg":3.71,"proficient":6,"total":7,"pct":85.7},"Responsive Design":{"avg":3.86,"proficient":7,"total":7,"pct":100.0},"Enterprise System":{"avg":2.29,"proficient":2,"total":7,"pct":28.6},"App Design":{"avg":3.57,"proficient":6,"total":7,"pct":85.7}},"graphic_branding":{"Logo Design":{"avg":3.57,"proficient":5,"total":7,"pct":71.4},"Visual Identity System (Often referred to as style guide)":{"avg":3.43,"proficient":5,"total":7,"pct":71.4},"Brand Guidelines (Comprehensive brand book)":{"avg":3.0,"proficient":4,"total":7,"pct":57.1},"Brand Collaterals (Stationeries, business cards, letterheads, merch, etc.)":{"avg":3.29,"proficient":5,"total":7,"pct":71.4},"Digital Branding Assets (Web banners, digital ad templates, email signatures)":{"avg":3.86,"proficient":7,"total":7,"pct":100.0},"Company Reports":{"avg":2.71,"proficient":3,"total":7,"pct":42.9},"Posters and Brochures/Flyers":{"avg":3.71,"proficient":6,"total":7,"pct":85.7}},"animation":{"Animated Assets":{"avg":2.57,"proficient":3,"total":7,"pct":42.9},"Motion Graphics":{"avg":2.43,"proficient":2,"total":7,"pct":28.6},"Video Editing":{"avg":2.71,"proficient":4,"total":7,"pct":57.1},"Explainer Video Animation":{"avg":1.71,"proficient":1,"total":7,"pct":14.3},"Site Animation":{"avg":2.71,"proficient":3,"total":7,"pct":42.9}},"illustration":{"Vector Illustration":{"avg":3.14,"proficient":5,"total":7,"pct":71.4},"Hand-drawn Illustrations":{"avg":2.43,"proficient":2,"total":7,"pct":28.6},"Storyboarding":{"avg":2.14,"proficient":2,"total":7,"pct":28.6},"Infographics":{"avg":3.43,"proficient":5,"total":7,"pct":71.4}},"total":7},"product_excellence":{"manual_qa":{"Manual Testing":{"avg":4.4,"proficient":5,"total":5,"pct":100.0},"Functional Testing":{"avg":4.6,"proficient":5,"total":5,"pct":100.0},"Regression Testing":{"avg":4.4,"proficient":5,"total":5,"pct":100.0},"Integration Testing":{"avg":4.2,"proficient":5,"total":5,"pct":100.0},"User Acceptance Testing (UAT)":{"avg":4.0,"proficient":5,"total":5,"pct":100.0},"Exploratory Testing":{"avg":4.4,"proficient":5,"total":5,"pct":100.0},"Test Case Design":{"avg":4.2,"proficient":5,"total":5,"pct":100.0},"Bug Reporting":{"avg":4.8,"proficient":5,"total":5,"pct":100.0}},"automation_qa":{"Selenium WebDriver (Java, Python, C#)":{"avg":2.8,"proficient":3,"total":5,"pct":60.0},"Cypress (JavaScript)":{"avg":1.6,"proficient":1,"total":5,"pct":20.0},"Playwright":{"avg":2.2,"proficient":2,"total":5,"pct":40.0},"Appium (Mobile)":{"avg":1.6,"proficient":1,"total":5,"pct":20.0},"Postman":{"avg":4.0,"proficient":5,"total":5,"pct":100.0},"REST Assured":{"avg":1.8,"proficient":1,"total":5,"pct":20.0}},"business_analysis":{"STLC & SDLC":{"avg":4.2,"proficient":5,"total":5,"pct":100.0},"Risk Analysis":{"avg":3.6,"proficient":4,"total":5,"pct":80.0},"Root Cause Analysis":{"avg":3.8,"proficient":4,"total":5,"pct":80.0},"Test Plan & Strategy":{"avg":4.0,"proficient":5,"total":5,"pct":100.0},"Requirement Traceability Matrix (RTM)":{"avg":3.6,"proficient":4,"total":5,"pct":80.0},"Agile Testing (Scrum/Kanban)":{"avg":4.0,"proficient":5,"total":5,"pct":100.0}},"total":5},"emerging_tech":{"ai_ml":{"ChatGPT":{"avg":3.33,"proficient":31,"total":45,"pct":68.9},"Claude":{"avg":2.89,"proficient":24,"total":45,"pct":53.3},"TensorFlow":{"avg":1.44,"proficient":6,"total":45,"pct":13.3},"PyTorch":{"avg":1.31,"proficient":4,"total":45,"pct":8.9},"Scikit-Learn":{"avg":1.36,"proficient":4,"total":45,"pct":8.9},"OpenAI API":{"avg":2.0,"proficient":14,"total":45,"pct":31.1},"Hugging Face":{"avg":1.44,"proficient":5,"total":45,"pct":11.1},"LangChain":{"avg":1.56,"proficient":8,"total":45,"pct":17.8}},"total":45}};
+
+        // Chart.js default settings
+        Chart.defaults.color = '#9ca3af';
+        Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
+        Chart.defaults.font.family = 'Poppins';
+
+        // Helper function to get color based on average score
+        function getColorByScore(avg) {
+            if (avg >= 3.5) return '#10b981'; // Green - Strength
+            if (avg >= 2.5) return '#f59e0b'; // Yellow - Moderate
+            return '#ef4444'; // Red - Learning opportunity
+        }
+
+        // Helper function to create horizontal bar chart
+        function createHorizontalBarChart(canvasId, data, title) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            
+            const labels = Object.keys(data);
+            const avgScores = labels.map(key => data[key].avg);
+            const colors = avgScores.map(avg => getColorByScore(avg));
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Average Skill Level',
+                        data: avgScores,
+                        backgroundColor: colors,
+                        borderColor: colors,
+                        borderWidth: 0,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: '#111827',
+                            titleColor: '#10b981',
+                            bodyColor: '#f9fafb',
+                            borderColor: 'rgba(16, 185, 129, 0.3)',
+                            borderWidth: 1,
+                            padding: 12,
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label;
+                                    const value = context.parsed.x;
+                                    const proficient = data[label].proficient;
+                                    const total = data[label].total;
+                                    const pct = data[label].pct;
+                                    return [
+                                        `Avg Score: ${value.toFixed(2)} / 5`,
+                                        `Proficient (3+): ${proficient}/${total} (${pct}%)`
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 5,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)'
+                            },
+                            ticks: {
+                                color: '#9ca3af'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Average Skill Level (1-5)',
+                                color: '#9ca3af',
+                                font: {
+                                    size: 12,
+                                    weight: 'normal'
+                                }
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#9ca3af',
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Generate insights
+        function generateInsights(data, category, total) {
+            const insights = [];
+            const strengths = [];
+            const opportunities = [];
+            
+            Object.keys(data).forEach(skill => {
+                const item = data[skill];
+                if (item.avg >= 3.5) {
+                    strengths.push({ skill, ...item });
+                } else if (item.avg < 2.5) {
+                    opportunities.push({ skill, ...item });
+                }
+            });
+            
+            // Sort by average
+            strengths.sort((a, b) => b.avg - a.avg);
+            opportunities.sort((a, b) => a.avg - b.avg);
+            
+            return { strengths, opportunities };
+        }
+
+        function displayInsights(containerId, dataObj, total) {
+            const container = document.getElementById(containerId);
+            let html = '';
+            
+            // Combine all categories
+            let allStrengths = [];
+            let allOpportunities = [];
+            
+            Object.keys(dataObj).forEach(category => {
+                if (category === 'total') return;
+                const insights = generateInsights(dataObj[category], category, total);
+                allStrengths = allStrengths.concat(insights.strengths);
+                allOpportunities = allOpportunities.concat(insights.opportunities);
+            });
+            
+            // Sort and get top 5
+            allStrengths.sort((a, b) => b.avg - a.avg);
+            allOpportunities.sort((a, b) => a.avg - b.avg);
+            
+            if (allStrengths.length > 0) {
+                html += '<div class="insight-item"><span class="strength">💪 Top Strengths:</span><ul style="margin-top: 8px;">';
+                allStrengths.slice(0, 5).forEach(item => {
+                    html += `<li>${item.skill}: ${item.avg.toFixed(2)}/5 avg (${item.pct}% proficient)</li>`;
+                });
+                html += '</ul></div>';
+            }
+            
+            if (allOpportunities.length > 0) {
+                html += '<div class="insight-item"><span class="opportunity">🎯 Learning Opportunities:</span><ul style="margin-top: 8px;">';
+                allOpportunities.slice(0, 5).forEach(item => {
+                    html += `<li>${item.skill}: ${item.avg.toFixed(2)}/5 avg (${item.pct}% proficient)</li>`;
+                });
+                html += '</ul></div>';
+            }
+            
+            container.innerHTML = html;
+        }
+
+        // Initialize all charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Enterprise Developers
+            createHorizontalBarChart('frontendChart', skillsData.enterprise_devs.frontend, 'Frontend');
+            createHorizontalBarChart('backendChart', skillsData.enterprise_devs.backend, 'Backend');
+            createHorizontalBarChart('databaseChart', skillsData.enterprise_devs.database, 'Database');
+            createHorizontalBarChart('devopsChart', skillsData.enterprise_devs.devops, 'DevOps');
+            displayInsights('dev-insights-content', skillsData.enterprise_devs, skillsData.enterprise_devs.total);
+            
+            // Emerging Tech
+            createHorizontalBarChart('aimlChart', skillsData.emerging_tech.ai_ml, 'AI/ML');
+            displayInsights('ai-insights-content', skillsData.emerging_tech, skillsData.emerging_tech.total);
+            
+            // Design Team
+            createHorizontalBarChart('uiuxChart', skillsData.design.uiux, 'UI/UX');
+            createHorizontalBarChart('graphicChart', skillsData.design.graphic_branding, 'Graphic Design');
+            createHorizontalBarChart('animationChart', skillsData.design.animation, 'Animation');
+            createHorizontalBarChart('illustrationChart', skillsData.design.illustration, 'Illustration');
+            displayInsights('design-insights-content', skillsData.design, skillsData.design.total);
+            
+            // Product Excellence
+            createHorizontalBarChart('manualQaChart', skillsData.product_excellence.manual_qa, 'Manual QA');
+            createHorizontalBarChart('automationQaChart', skillsData.product_excellence.automation_qa, 'Automation');
+            createHorizontalBarChart('baChart', skillsData.product_excellence.business_analysis, 'Business Analysis');
+            displayInsights('pet-insights-content', skillsData.product_excellence, skillsData.product_excellence.total);
+        });
+    </script>
+</body>
+</html>
